@@ -1,9 +1,12 @@
 {
   "name": "ember-theme-changer",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "0.0.1",
+  "description": "Easy way to change themes by swapping CSS files.",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "css",
+    "theme",
+    "style"
   ],
   "license": "MIT",
   "author": "",
@@ -11,7 +14,7 @@
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": "https://github.com/leadiato/ember-theme-changer",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
