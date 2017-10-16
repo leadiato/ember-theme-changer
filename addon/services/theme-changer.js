@@ -114,10 +114,10 @@ export default Service.extend(Evented, {
     const { themes, theme } = this.getProperties('themes', 'theme');
     const currentIndex = themes.indexOf(theme);
     let newTheme = null;
-    if (currentIndex < theme.length) {
-      newTheme = themes.get(currentIndex+1);
-    } else {
+    if (currentIndex === theme.length - 1) {
       newTheme = themes.get(0);
+    } else {
+      newTheme = themes.get(currentIndex+1);
     }
 
     this.set('theme', newTheme);
