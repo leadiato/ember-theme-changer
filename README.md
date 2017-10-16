@@ -1,8 +1,8 @@
 # ember-theme-changer
 
-This Ember-Addon will help you to switch CSS files on runtime.
+This Ember-Addon will help you to switch CSS style files on runtime.
 
-For example, let's say you want to support multiple themes in your app, each of the theme styles is defined in its own CSS file (I'll show you how easy is to accomplish this on Ember) and you want to switch styles
+For example, let's say you want to support multiple themes in your app and each of the theme styles is defined in its own CSS file (I'll show you how easy is to accomplish this on Ember). Ember-theme-changer addon provides an easy mechanism to change themes and subscribe to theme changes in your different components to handle those styles that you couldn't define using stylesheet.
 
 
 
@@ -33,11 +33,13 @@ module.exports = function(environment) {
 
 ## Defining themes on Ember.
 
-There are many mechanism to define themes in your application, which one you wanted to you is fine, but if you didn't define any theme yet, you can follow this simple example using Sass:
+There are many mechanism to define themes in your application. In the following example I'll be defining style variables but you can use any mechanism that works better for you. Also, I'll be using Sass preprocessor, but the same solution applies with Less:
 
-### 1st Writing multiple theme files
-app.scss
+### 1st) Writing multiple theme files
+
 ```
+// app.scss
+
 // In your app.scss file you can define styles that are dependent on the current theme, or import external styles too
 @import "ember-modal-dialog/ember-modal-structure";
 @import "ember-modal-dialog/ember-modal-appearance";
@@ -47,17 +49,18 @@ body {
 }
 ```
 
-main.scss
 ```
-// here is where you define styles that depends on the current theme. All the theme dependent values are referenced with variables. eg:
+// main.scss
 
+// here is where you define styles that depends on the current theme. All the theme dependent values are referenced with variables. eg:
 body {
   background-color: $bodyBackgroundColor;
 }
 ```
 
-dark.scss
 ```
+// dark.scss
+
 // 1) define all the variables you need
 $bodyBackgroundColor: '#fff';
 ...
@@ -67,8 +70,9 @@ $bodyBackgroundColor: '#fff';
 ```
 
 And do the same for the rest of the themes. eg:
-light.scss
 ```
+// light.scss
+
 // 1) Define variables
 $bodyBackgroundColor: '#000';
 ...
@@ -76,10 +80,11 @@ $bodyBackgroundColor: '#000';
 @import 'main';
 ```
 
-### 2nd generating theme files.
+### 2nd) Generating theme files.
 By default, Ember only generates 1 css file based on your app.scss content (or app.less, app.css depending in your your style preprocessor), in this case we want to generate 2 extra files (dark.css & light.css). This is accomplish easily by telling Ember about the extra output files in the `ember-cli-build.js` file:
 
 ```
+// ember-cli-build.js
     outputPaths: {
       app: {
         css: {
@@ -103,8 +108,10 @@ All interaction with the addon is though the `themeChanger` service.
 
 You can circle through the themes invoking the service `toggleTheme` method, or set an specific value with the `theme` property.
 
-Your component.js:
+
 ```
+// your_component.js:
+
 themeChanger: service(),
 ....
 
@@ -118,12 +125,13 @@ action: {
 }
 ```
 
-### Theme change Events
+### Theme-change Event
 
-In some situation you could have some style defined outside of the CSS boundaries, This addon provides an event you can subscribed to detect changes int he current theme allowing you to execute any code.
+In some situation you could have some styles defined outside of the CSS boundaries, this addon provides an event you can subscribe to detect changes int he current theme allowing you to execute any code.
 
-Your component.js:
+
 ```
+// your_component.js:
 themeChanger: service(),
 chartColor,
 ....
