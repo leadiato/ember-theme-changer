@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import AssetMap from './asset-map';
 
 const {
   Service,
@@ -14,7 +15,7 @@ const {
 const LINK_TAG_ID = 'ember-theme-changer-stylesheet';
 
 export default Service.extend(Evented, {
-
+  assetMap: service(),
   cookies: service(),
   _themeName: null,
   defaultTheme: null,
@@ -33,7 +34,6 @@ export default Service.extend(Evented, {
       warn('Ember-theme-changer did not find a theme configuration.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.', false,
       { id: 'ember-theme-changer.theme' });
     } else {
-
       if (ENV.theme.themes == null) {
         warn('Ember-theme-changer did not find themes in your environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
         false,
@@ -87,10 +87,11 @@ export default Service.extend(Evented, {
     linkTag.rel = 'stylesheet';
 
     const { cookies, cookieName, defaultTheme } = this.getProperties('cookies', 'cookieName', 'defaultTheme');
+
     let themeValue = cookies.read(cookieName) || defaultTheme;
 
     if (!isEmpty(themeValue)) {
-      linkTag.href = '/assets/' + themeValue + '.css';
+      linkTag.href = this.get('assetMap').resolve(`assets/${themeValue}.css`);
       this.trigger('theme-changed', themeValue);
     }
 
@@ -146,12 +147,11 @@ export default Service.extend(Evented, {
       // 1- Update the theme value in the cookie
       cookies.write(cookieName, value, { path: '/', expires: 'Fri, 31 Dec 9999 23:59:59 GMT' });
       // 2- Uploading the new style
-      document.getElementById(LINK_TAG_ID).setAttribute("href", '/assets/' + value + '.css');
+      document.getElementById(LINK_TAG_ID).setAttribute("href", this.get('assetMap').resolve(`assets/${value}.css`));
       // 3- Triggering theme-change notification
       this.trigger(eventName, value);
 
       return value;
     }
   })
-
 });
