@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import AssetMap from './asset-map';
+// import AssetMap from './asset-map';
 
 const {
   Service,
@@ -26,41 +26,41 @@ export default Service.extend(Evented, {
   // @private
   init() {
     this._super(...arguments);
-    let owner = getOwner(this);
-    let ENV = owner.factoryFor('config:environment').class;
+    const owner = getOwner(this);
+    const ENV = owner.factoryFor('config:environment').class;
 
     let defaultTheme = null;
     if (!ENV.theme) {
       warn('Ember-theme-changer did not find a theme configuration.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.', false,
-      { id: 'ember-theme-changer.theme' });
+        { id: 'ember-theme-changer.theme' });
     } else {
       if (ENV.theme.themes == null) {
         warn('Ember-theme-changer did not find themes in your environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
-        false,
-        { id: 'ember-theme-changer.themes' });
+          false,
+          { id: 'ember-theme-changer.themes' });
       } else if (isEmpty(ENV.theme.themes)) {
         warn('Ember-theme-changer requires themes to be defined. Please add an array of supported themes in your Environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.', false,
-        { id: 'ember-theme-changer.themes.empty' });
+          { id: 'ember-theme-changer.themes.empty' });
       } else if (!isArray(ENV.theme.themes)) {
         warn('Ember-theme-changer requires the themes configuration to be an array. Please add an array of supported themes in your Environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
-        false,
-        { id: 'ember-theme-changer.themes.array' });
+          false,
+          { id: 'ember-theme-changer.themes.array' });
       } else {
         this.set('themes', ENV.theme.themes);
         defaultTheme = (ENV.theme || {}).defaultTheme;
         if (defaultTheme == null) {
           defaultTheme = ENV.theme.themes.get('firstObject');
           warn(`ember-theme-changer did not find a default theme; falling back to "${defaultTheme}".`,
-          false, {
-            id: 'ember-theme.changer.default-theme'
-          });
+            false, {
+              id: 'ember-theme.changer.default-theme'
+            });
         } else {
           if (!ENV.theme.themes.includes(defaultTheme)) {
             const firstTheme = ENV.theme.themes.get('firstObject');
-            warn(`ember-theme-changer, default theme \'${defaultTheme}\' is not listed as part of the themes list: \'${ENV.theme.themes}\'. Defaulting to \'${firstTheme}\'.`,
-            false, {
-              id: 'ember-theme.changer.invalid-default-theme'
-            });
+            warn(`ember-theme-changer, default theme '${defaultTheme}' is not listed as part of the themes list: '${ENV.theme.themes}'. Defaulting to '${firstTheme}'.`,
+              false, {
+                id: 'ember-theme.changer.invalid-default-theme'
+              });
             defaultTheme = firstTheme;
           }
         }
@@ -88,7 +88,7 @@ export default Service.extend(Evented, {
 
     const { cookies, cookieName, defaultTheme } = this.getProperties('cookies', 'cookieName', 'defaultTheme');
 
-    let themeValue = cookies.read(cookieName) || defaultTheme;
+    const themeValue = cookies.read(cookieName) || defaultTheme;
 
     if (!isEmpty(themeValue)) {
       linkTag.href = this.get('assetMap').resolve(`assets/${themeValue}.css`);
@@ -118,7 +118,7 @@ export default Service.extend(Evented, {
     if (currentIndex === themes.length - 1) {
       newTheme = themes.get(0);
     } else {
-      newTheme = themes.get(currentIndex+1);
+      newTheme = themes.get(currentIndex + 1);
     }
 
     this.set('theme', newTheme);
@@ -147,7 +147,7 @@ export default Service.extend(Evented, {
       // 1- Update the theme value in the cookie
       cookies.write(cookieName, value, { path: '/', expires: 'Fri, 31 Dec 9999 23:59:59 GMT' });
       // 2- Uploading the new style
-      document.getElementById(LINK_TAG_ID).setAttribute("href", this.get('assetMap').resolve(`assets/${value}.css`));
+      document.getElementById(LINK_TAG_ID).setAttribute('href', this.get('assetMap').resolve(`assets/${value}.css`));
       // 3- Triggering theme-change notification
       this.trigger(eventName, value);
 
