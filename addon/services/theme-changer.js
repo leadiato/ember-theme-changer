@@ -16,11 +16,12 @@ export default Service.extend(Evented, {
   defaultTheme: null,
   cookieName: 'ember-theme-changer__current-theme',
   eventName: 'ember-theme-changer__theme-changed',
-  themes: [],
+  themes: null,
 
   // @private
   init() {
     this._super(...arguments);
+    this.themes = [];
     const owner = getOwner(this);
     const ENV = owner.factoryFor('config:environment').class;
 
