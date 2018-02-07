@@ -1,16 +1,11 @@
-import Ember from 'ember';
+import Service, { inject as service } from '@ember/service';
+import { computed } from '@ember/object';
+import Evented from '@ember/object/evented';
+import { isEmpty } from '@ember/utils';
+import { isArray } from '@ember/array';
+import { getOwner } from '@ember/application';
+import { warn } from '@ember/debug';
 // import AssetMap from './asset-map';
-
-const {
-  Service,
-  Evented,
-  warn,
-  isEmpty,
-  isArray,
-  getOwner,
-  computed,
-  inject: { service }
-} = Ember;
 
 const LINK_TAG_ID = 'ember-theme-changer-stylesheet';
 
