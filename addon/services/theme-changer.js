@@ -27,19 +27,17 @@ export default Service.extend(Evented, {
 
     let defaultTheme = null;
     if (!ENV.theme) {
-      warn('Ember-theme-changer did not find a theme configuration.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.', false,
+      warn('Ember-theme-changer did not find a theme configuration.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
         { id: 'ember-theme-changer.theme' });
     } else {
       if (ENV.theme.themes == null) {
         warn('Ember-theme-changer did not find themes in your environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
-          false,
           { id: 'ember-theme-changer.themes' });
       } else if (isEmpty(ENV.theme.themes)) {
-        warn('Ember-theme-changer requires themes to be defined. Please add an array of supported themes in your Environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.', false,
-          { id: 'ember-theme-changer.themes.empty' });
+        warn('Ember-theme-changer requires themes to be defined. Please add an array of supported themes in your Environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
+                  { id: 'ember-theme-changer.themes.empty' });
       } else if (!isArray(ENV.theme.themes)) {
         warn('Ember-theme-changer requires the themes configuration to be an array. Please add an array of supported themes in your Environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
-          false,
           { id: 'ember-theme-changer.themes.array' });
       } else {
         this.set('themes', ENV.theme.themes);
@@ -47,16 +45,12 @@ export default Service.extend(Evented, {
         if (defaultTheme == null) {
           defaultTheme = ENV.theme.themes.get('firstObject');
           warn(`ember-theme-changer did not find a default theme; falling back to "${defaultTheme}".`,
-            false, {
-              id: 'ember-theme.changer.default-theme'
-            });
+            { id: 'ember-theme.changer.default-theme'});
         } else {
           if (!ENV.theme.themes.includes(defaultTheme)) {
             const firstTheme = ENV.theme.themes.get('firstObject');
             warn(`ember-theme-changer, default theme '${defaultTheme}' is not listed as part of the themes list: '${ENV.theme.themes}'. Defaulting to '${firstTheme}'.`,
-              false, {
-                id: 'ember-theme.changer.invalid-default-theme'
-              });
+              { id: 'ember-theme.changer.invalid-default-theme'});
             defaultTheme = firstTheme;
           }
         }
