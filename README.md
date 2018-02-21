@@ -24,12 +24,27 @@ module.exports = function(environment) {
       themes: [ 'light', 'dark'], // MANDATORY
       defaultTheme: 'dark', // OPTIONAL
       eventName: 'name of the event to be trigger when the theme changes', // OPTIONAL
-      cookieName: 'name of cookie used to save the current theme value' // OPTIONAL
+      cookieName: 'name of cookie used to save the current theme value', // OPTIONAL
+      useAssetMap: [default to true in Prod environment] boolean value to indicate if the assets were fingerprinted and an assetMap.json file is available // OPTIONAL
     }
   };
   return ENV;
 };
 ```
+
+### Fingerprinting assets
+If your app is fingerprinting your CSS files with Broccoli (which is default to true in prod environment), you could tell the Addon to use the generated `/assets/assetMap.json` to load the correct asset.
+
+Enable the asset-map generation in your ember-cli-build file:
+```
+fingerprint: {
+  enabled: Default: app.env === 'production' - Boolean. Enables fingerprinting if true. True by default if current environment is production.
+  generateAssetMap: true
+}
+```
+
+More info: https://ember-cli.com/asset-compilation#fingerprinting-and-cdn-urls
+
 
 ## Defining themes on Ember.
 

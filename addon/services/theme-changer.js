@@ -5,7 +5,6 @@ import { isEmpty } from '@ember/utils';
 import { isArray } from '@ember/array';
 import { getOwner } from '@ember/application';
 import { warn } from '@ember/debug';
-// import AssetMap from './asset-map';
 
 const LINK_TAG_ID = 'ember-theme-changer-stylesheet';
 
@@ -22,6 +21,7 @@ export default Service.extend(Evented, {
   init() {
     this._super(...arguments);
     this.themes = [];
+
     const owner = getOwner(this);
     const ENV = owner.factoryFor('config:environment').class;
 
@@ -35,7 +35,7 @@ export default Service.extend(Evented, {
           { id: 'ember-theme-changer.themes' });
       } else if (isEmpty(ENV.theme.themes)) {
         warn('Ember-theme-changer requires themes to be defined. Please add an array of supported themes in your Environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
-                  { id: 'ember-theme-changer.themes.empty' });
+          { id: 'ember-theme-changer.themes.empty' });
       } else if (!isArray(ENV.theme.themes)) {
         warn('Ember-theme-changer requires the themes configuration to be an array. Please add an array of supported themes in your Environment file.\neg: themes: { themes: [\'theme1\', \'theme2\',...] }.',
           { id: 'ember-theme-changer.themes.array' });
@@ -45,12 +45,12 @@ export default Service.extend(Evented, {
         if (defaultTheme == null) {
           defaultTheme = ENV.theme.themes.get('firstObject');
           warn(`ember-theme-changer did not find a default theme; falling back to "${defaultTheme}".`,
-            { id: 'ember-theme.changer.default-theme'});
+            { id: 'ember-theme.changer.default-theme' });
         } else {
           if (!ENV.theme.themes.includes(defaultTheme)) {
             const firstTheme = ENV.theme.themes.get('firstObject');
             warn(`ember-theme-changer, default theme '${defaultTheme}' is not listed as part of the themes list: '${ENV.theme.themes}'. Defaulting to '${firstTheme}'.`,
-              { id: 'ember-theme.changer.invalid-default-theme'});
+              { id: 'ember-theme.changer.invalid-default-theme' });
             defaultTheme = firstTheme;
           }
         }
@@ -81,11 +81,16 @@ export default Service.extend(Evented, {
     const themeValue = cookies.read(cookieName) || defaultTheme;
 
     if (!isEmpty(themeValue)) {
-      linkTag.href = this.get('assetMap').resolve(`assets/${themeValue}.css`);
+      linkTag.href = this._getAssetFullPath(themeValue);
       this.trigger('theme-changed', themeValue);
     }
 
     headTag.appendChild(linkTag);
+  },
+
+  // @private
+  _getAssetFullPath(assetName) {
+    return this.get('assetMap').resolve(`assets/${assetName}.css`);
   },
 
   // @public
@@ -137,7 +142,7 @@ export default Service.extend(Evented, {
       // 1- Update the theme value in the cookie
       cookies.write(cookieName, value, { path: '/', expires: 'Fri, 31 Dec 9999 23:59:59 GMT' });
       // 2- Uploading the new style
-      document.getElementById(LINK_TAG_ID).setAttribute('href', this.get('assetMap').resolve(`assets/${value}.css`));
+      document.getElementById(LINK_TAG_ID).setAttribute('href', this._getAssetFullPath(value));
       // 3- Triggering theme-change notification
       this.trigger(eventName, value);
 
