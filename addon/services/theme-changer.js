@@ -6,11 +6,10 @@ import { isArray } from '@ember/array';
 import { getOwner } from '@ember/application';
 import { warn } from '@ember/debug';
 
-const LINK_TAG_ID = 'ember-theme-changer-stylesheet';
-
 export default Service.extend(Evented, {
   assetMap: service(),
   cookies: service(),
+  headData: service(),
   _themeName: null,
   defaultTheme: null,
   cookieName: 'ember-theme-changer__current-theme',
@@ -71,21 +70,13 @@ export default Service.extend(Evented, {
   // @private
   _generateStyleTag() {
 
-    const headTag = document.head;
-    const linkTag = document.createElement('link');
-    linkTag.id = LINK_TAG_ID;
-    linkTag.rel = 'stylesheet';
-
     const { cookies, cookieName, defaultTheme } = this.getProperties('cookies', 'cookieName', 'defaultTheme');
-
     const themeValue = cookies.read(cookieName) || defaultTheme;
 
     if (!isEmpty(themeValue)) {
-      linkTag.href = this._getAssetFullPath(themeValue);
+      this.set('headData.themeHref', this._getAssetFullPath(themeValue));
       this.trigger('theme-changed', themeValue);
     }
-
-    headTag.appendChild(linkTag);
   },
 
   // @private
@@ -142,7 +133,7 @@ export default Service.extend(Evented, {
       // 1- Update the theme value in the cookie
       cookies.write(cookieName, value, { path: '/', expires: 'Fri, 31 Dec 9999 23:59:59 GMT' });
       // 2- Uploading the new style
-      document.getElementById(LINK_TAG_ID).setAttribute('href', this._getAssetFullPath(value));
+      this.set('headData.themeHref', this._getAssetFullPath(value));
       // 3- Triggering theme-change notification
       this.trigger(eventName, value);
 

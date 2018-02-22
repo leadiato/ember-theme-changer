@@ -3,6 +3,6 @@
 module.exports = {
   name: 'ember-theme-changer',
   isDevelopingAddon() {
-    return false;
+    return true;
   }
 };

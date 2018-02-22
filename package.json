@@ -22,7 +22,8 @@
     "test": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.6.0"
+    "ember-cli-babel": "^6.6.0",
+    "ember-cli-head": "^0.4.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

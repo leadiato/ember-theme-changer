@@ -13,10 +13,11 @@ For example, let's say you want to support multiple themes in your app and each 
 
 ## Configuration
 
-In our example we want to support Dark and Light themes. To accomplish it you must define Ember-Changer available themes in your `config/environment.js` file:
+In this example we want to support Dark and Light themes. To accomplish it you must define all available themes in your `config/environment.js` file:
 
 ```
-/* jshint node: true */
+// config/environment.js
+
 module.exports = function(environment) {
   var ENV = {
     /* ... */
@@ -42,8 +43,23 @@ fingerprint: {
   generateAssetMap: true
 }
 ```
+More info: https://ember-cli.com/asset-compilation#fingerprinting-and-cdn-urls & https://github.com/rickharrison/broccoli-asset-rev
 
-More info: https://ember-cli.com/asset-compilation#fingerprinting-and-cdn-urls
+## Pre-requisites
+Since v0.3.0 `ember-theme-changer` relies in `ember-cli-head` v0.4.0 addon to load the theme in runtime and provide Fastboot compatibility.
+
+If you are not already using `ember-cli-head` (or another addon that requires it) you must follow these 2 simple steps:
+
+1) Create a file `head.hbs` in your app/template folder with this content:
+```
+// app/template/head.hbs
+<link rel="stylesheet" href="{{model.themeHref}}">
+```
+(If you already have a `head.hbs` file, just add the line: `<link rel="stylesheet" href="{{model.themeHref}}">`)
+
+2) Add `{{head-layout}}` to the top of your application template.
+
+Check [ember-cli-head](https://github.com/ronco/ember-cli-head) for more info.
 
 
 ## Defining themes on Ember.
